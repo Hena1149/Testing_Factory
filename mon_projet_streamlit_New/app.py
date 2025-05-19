@@ -27,6 +27,17 @@ from datetime import datetime
 import PyPDF2
 from tqdm import tqdm
 
+import spacy
+import subprocess
+
+# Télécharger automatiquement le modèle si pas présent
+try:
+    nlp = spacy.load("fr_core_news_sm")
+except:
+    subprocess.run(["python", "-m", "spacy", "download", "fr_core_news_sm"])
+    nlp = spacy.load("fr_core_news_sm")
+
+
 def is_similar(text1: str, text2: str, threshold: float = 0.85) -> bool:
     """Détermine si deux textes sont similaires."""
     return SequenceMatcher(None, text1.lower(), text2.lower()).ratio() >= threshold
